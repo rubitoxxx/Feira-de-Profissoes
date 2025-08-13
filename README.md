@@ -6,15 +6,16 @@
 [![Badge - Supabase](https://img.shields.io/badge/Supabase-Backend-green?style=for-the-badge&logo=supabase)]()
 [![Badge - Status](https://img.shields.io/badge/Status-Concluído-brightgreen?style=for-the-badge)]()
 
-> Projeto acadêmico transformado em rede social funcional, com sistema de moedas virtuais e integração full-stack com Supabase.
+> **Adaptação para a Feira de Profissões do ISEPE Rondon**: O Mural Rubix, inicialmente desenvolvido como projeto acadêmico, foi adaptado para a feira, permitindo a interação entre estudantes e profissionais através de um sistema gamificado de moedas virtuais e integração full-stack com Supabase.
 
+https://rubitoxxx.github.io/Feira-de-Profissoes/
 ---
 
 ## 📌 Visão Geral
 
-O **Mural Rubix** é uma rede social web responsiva que permite aos usuários criar postagens, comentar, gerenciar perfis e participar de um sistema de **gamificação com RubixCoins 🪙**. Desenvolvido com **JavaScript puro**, a plataforma se conecta à infraestrutura do **Supabase** (PostgreSQL + Auth + Storage) para autenticação e persistência de dados.
+O **Mural Rubix** é uma plataforma de rede social web responsiva que foi adaptada para a **Feira de Profissões do ISEPE Rondon**, proporcionando aos estudantes a oportunidade de interagir, aprender sobre diferentes profissões e participar de atividades gamificadas. A plataforma permite aos usuários criar postagens, comentar, gerenciar seus perfis e acumular **RubixCoins 🪙** como recompensa por sua participação.
 
-Além da versão web, um **aplicativo Android (Kotlin)** foi desenvolvido como wrapper da aplicação, garantindo acesso otimizado em dispositivos móveis.
+Desenvolvido com **JavaScript puro**, o sistema é integrado ao **Supabase** (PostgreSQL + Auth + Storage) para autenticação e persistência de dados, garantindo a segurança e a escalabilidade da aplicação. O projeto também inclui um aplicativo Android (Kotlin) para fornecer acesso otimizado aos participantes da feira por meio de dispositivos móveis.
 
 ---
 
@@ -137,5 +138,4 @@ rubix/
 
 ---
 
-> Projeto desenvolvido como parte da formação acadêmica em Análise e Desenvolvimento de Sistemas 🚀
-
+> **Adaptação para a Feira de Profissões do ISEPE Rondon**: Este projeto foi transformado para promover a interação entre estudantes e profissionais, com a utilização de gamificação e incentivo à participação ativa. 🚀
