@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Mural Rubix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div> 
+        <br>
+        <br>
+        <br>
+        <center><img src="./isepe.png" alt="Logo ISEPE" class="logo"></center>
+    </div>
+    <div class="login-container">
+        <h2>CRIAR CONTA</h2>
+        <div class="input-icon">
+            <span class="icon">✉️</span>
+            <input type="email" id="email" placeholder="Email" required>
+        </div>
+        <div class="input-icon">
+            <span class="icon">🔒</span>
+            <input type="password" id="password" placeholder="Crie uma senha forte">
+        </div>
+        <button onclick="cadastrar()" class="btn-cadastrar">Cadastrar</button>
+        <p id="mensagemStatus"></p>
+        <p><a href="index.html">Já tem uma conta? Faça login</a></p>
+    </div>
+    <!-- Scripts do Supabase e login -->
+    <script src="login.js"></script>
+<div>
+    <div> 
+        <br>
+        <center><img src="./ads.png" alt="Logo ADS" class="logo" style="width: 120px; height: auto;"></center>
+        <center><h3> TURMA 3 <P>  
+        </P>
+             ANÁLISE E DESENVOLVIMENTO DE SISTEMAS</h3></center>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="cadastro.js"></script>
+</body>
+</html>

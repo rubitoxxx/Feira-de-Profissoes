@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+        <script type="module" src="supabaseClient.js"></script> 
+        <script type="module" src="utils.js"></script> 
+<html>
+  <head>
+    <title>Jogo do coelho</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      /* Estilos não alterados */
+    </style>
+  </head>
+  <body>
+    <br>
+    <div id="principal"> 
+      <center>
+        <div id="pontos" align="right" style="padding:3px;font-size:20px;"></div>
+        <div id="personagem3" onClick="pular();"></div>
+        <div id="obstaculo"></div>
+        <div id="obstaculo2"></div>
+        <div id="chao" onClick="rasteira();"></div>
+        <a href="javascript:;;" onClick="rasteira();" style="left:0px;top:40%;position: absolute;font-size:20px;">&#128317;</a> 
+        <a href="javascript:;;" onClick="pular();" style="right:0px;top:40%;position: absolute;font-size:20px;">&#128316;</a> 
+      </center>
+    </div>
+    
+    <!-- Ranking Board -->
+    <div id="rankingBoardMenu" style="padding-top: 20px; text-align: center;"></div>
+
+    <script>
+      var jogar = false;
+      var pontuacao = -1;
+      var maximopontuacao = 0;
+
+      // Função para carregar o ranking
+      async function loadMenuRanking() {
+        const rankingBoardMenu = document.getElementById('rankingBoardMenu');
+        rankingBoardMenu.innerHTML = '<p>Carregando ranking...</p>';
+ 
+        
+        if (typeof window._supabase === 'undefined') {
+            console.error('Supabase client não inicializado ao carregar ranking.');
+            rankingBoardMenu.innerHTML = '<p>Não foi possível carregar o ranking (erro de Supabase).</p>';
+            return;
+        }
+
+        const { data, error } = await window._supabase
+            .from('runner_scores')
+            .select('score, profiles(username)')
+            .order('score', { ascending: false })
+            .limit(5);
+
+        if (error) {
+            console.error("Erro ao carregar ranking:", error);
+            rankingBoardMenu.innerHTML = '<p>Não foi possível carregar o ranking. Tente novamente.</p>';
+            return;
+        }
+
+        if (data.length === 0) {
+            rankingBoardMenu.innerHTML = '<p>Seja o primeiro a deixar sua marca!</p>';
+            return;
+        }
+
+        const rankingList = document.createElement('ol');
+        data.forEach((entry, index) => {
+            const playerName = entry.profiles && entry.profiles.username ? entry.profiles.username : 'Anônimo';
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<span>#${index + 1} ${playerName}</span> <span>${String(entry.score).padStart(5, '0')}</span>`;
+            rankingList.appendChild(listItem);
+        });
+
+        rankingBoardMenu.innerHTML = '';
+        rankingBoardMenu.appendChild(rankingList);
+      }
+
+      // Função para salvar a pontuação
+async function saveScore(finalScore) {
+    if (!currentUser) {
+        console.warn('Tentativa de salvar pontuação sem usuário logado.');
+        return;
+    }
+    if (typeof window._supabase === 'undefined') {
+        console.error('Supabase client não inicializado ao salvar pontuação.');
+        return;
+    }
+
+    const { error } = await window._supabase
+        .from('caowalker')  // Alterado para a tabela caowalker
+        .insert([{ user_id: currentUser.id, score: finalScore }]);
+
+    if (error) {
+        console.error("Erro ao salvar pontuação:", error);
+    } else {
+        console.log("Pontuação salva com sucesso!");
+    }
+}
+
+      // Função para iniciar o jogo
+      function jogue() {
+        jogar = true;
+        pontuacao = 0;
+        maximopontuacao = Math.max(maximopontuacao, pontuacao);
+        loadMenuRanking(); // Carrega o ranking ao iniciar o jogo
+      }
+
+      function pular() {
+        document.getElementById("personagem3").style.cssText = 'top:0px; transition: all 0.3s ease-out; transform : rotate(-15deg); animation: play1 1s steps(1) infinite;';
+        setTimeout(function() {
+          document.getElementById("personagem3").style.cssText = 'transition: all 1s ease-out;';
+          document.getElementById("personagem3").style.top = "90px";
+        }, 500);
+      }
+
+      function rasteira() {
+        document.getElementById("personagem3").style.cssText = 'top:130px; transition: all 0.2s ease-out; transform : rotate(-95deg); animation: play1 3s steps(3) infinite;';
+        setTimeout(function() {
+          document.getElementById("personagem3").style.cssText = 'transition: all 1s ease-out;';
+          document.getElementById("personagem3").style.top = "90px";
+        }, 500);
+      }
+
+      function alvo() {
+        var aw = document.getElementById("personagem3").offsetWidth;
+        var ah = document.getElementById("personagem3").offsetHeight;
+        var bw = document.getElementById("obstaculo").offsetWidth;
+        var bh = document.getElementById("obstaculo").offsetHeight;
+        var cw = document.getElementById("obstaculo2").offsetWidth;
+        var ch = document.getElementById("obstaculo2").offsetHeight;
+        var at = document.getElementById("personagem3").offsetTop;
+        var al = document.getElementById("personagem3").offsetLeft;
+        var bt = document.getElementById("obstaculo").offsetTop;
+        var bl = document.getElementById("obstaculo").offsetLeft;
+        var ct = document.getElementById("obstaculo2").offsetTop;
+        var cl = document.getElementById("obstaculo2").offsetLeft;
+
+        if (al < bl + bw && bl < al + aw && at < bt + bh && bt < at + ah) { fim(); }
+        if (al < cl + cw && cl < al + aw && at < ct + ch && ct < at + ah) { fim(); }
+      }
+
+      function fim() {
+        jogar = false;
+        document.getElementById("obstaculo").style.display = 'none';
+        document.getElementById("obstaculo2").style.display = 'none';
+        if (pontuacao < 0) {
+          pontuacao = 0;
+          document.getElementById("pontos").innerHTML = '<center><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><a href="javascript:;;"  class="botao"  onclick="javascript:jogue();">Play</a></center>';
+        } else {
+          saveScore(pontuacao); // Salva a pontuação quando o jogo termina
+          maximopontuacao = Math.max(maximopontuacao, pontuacao);
+          document.getElementById("pontos").innerHTML = '<div align=center style=font-size:25px><br><br>Pontos: ' + pontuacao + ' &nbsp;&nbsp;&nbsp;&nbsp; Máximo: ' + maximopontuacao + '<h1>Game Over</h1></div><center><br><br><br><br><br><br><br><a href="javascript:;;"  class="botao"  onclick="javascript:jogue();">Play</a></center>';
+        }
+      }
+
+      setInterval(function() { alvo(); }, 100);
+
+      function sortear() {
+        var nn = Math.floor(Math.random() * (2 - 1 + 1) + 1);
+        if (nn == 1) { 
+          document.getElementById("obstaculo").style.display = 'block';
+          document.getElementById("obstaculo2").style.display = 'none';
+        } else {
+          document.getElementById("obstaculo").style.display = 'none';
+          document.getElementById("obstaculo2").style.display = 'block';
+        }
+        pontuacao++;
+        if (maximopontuacao < pontuacao) { maximopontuacao = pontuacao; }
+        document.getElementById("pontos").innerHTML = pontuacao;
+      }
+
+      setInterval(function() { if (jogar) { sortear(); } }, 2000);
+
+      fim();
+
+      // Carregar o ranking ao iniciar
+      loadMenuRanking();
+
+      // Adiciona os eventos para as setas
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "ArrowUp") { // seta para cima
+          pular();
+        }
+        if (event.key === "ArrowDown") { // seta para baixo
+          rasteira();
+        }
+      });
+    </script>
+  </body>
+</html>

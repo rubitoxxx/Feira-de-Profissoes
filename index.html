@@ -1,0 +1,29 @@
+<!DOCTYPE html> 
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Feira das Profissões</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <img src="isepe.png" style="display:block; margin:auto; max-width:100%; height:auto;">
+        <h2>Login - Feira de Profissões</h2>
+        <div class="input-icon">
+            <input type="text" id="ra_cpf" placeholder="Informe seu E-mail" name="ra_cpf" required>
+        </div>
+        <div class="input-icon">
+            <input type="password" id="password" placeholder="Informe a sua senha" required>
+        </div>
+
+        <button id="login-button" class="btn-acessar">Acessar</button>
+        <p id="mensagemErro" class="error-message"></p>
+        <button onclick="window.location.href='cadastro.html'" class="btn-cadastre-se">Cadastre-se</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>

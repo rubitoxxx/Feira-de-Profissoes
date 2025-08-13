@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="supabaseClient.js"></script>
+    <script type="module" src="utils.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="forca.css">
+</head>
+<body>
+
+    <div id="tela-inicio">
+        <h1>Bem-vindo ao Jogo da Forca!</h1>
+        <button id="botao-iniciar">Começar Jogo</button>
+        <button id="btnVoltarMural">Voltar para o Mural</button>
+
+        <div id="menu-ranking">
+            <h2>🏆 Top 5 🏆</h2>
+            <div id="ranking-board-menu">
+                <p>Carregando ranking...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="jogo-principal" class="hidden">
+        <h1>Jogo da Forca</h1>
+        <div class="jogo-container">
+            <div class="forca-container">
+                <svg height="250" width="200" class="forca">
+                    <line x1="60" y1="20" x2="140" y2="20" />
+                    <line x1="140" y1="20" x2="140" y2="50" />
+                    <line x1="60" y1="20" x2="60" y2="230" />
+                    <line x1="20" y1="230" x2="100" y2="230" />
+
+                    <circle cx="140" cy="70" r="20" class="homem-parte" /> 
+                    <line x1="140" y1="90" x2="140" y2="150" class="homem-parte" /> 
+                    <line x1="140" y1="120" x2="110" y2="100" class="homem-parte" /> 
+                    <line x1="140" y1="120" x2="170" y2="100" class="homem-parte" /> 
+                    <line x1="140" y1="150" x2="110" y2="180" class="homem-parte" /> 
+                    <line x1="140" y1="150" x2="170" y2="180" class="homem-parte" /> 
+                </svg>
+            </div>
+            <div id="palavra-container"></div>
+            <div id="teclado"></div>
+            <div id="mensagem"></div>
+            <button id="btnTelaInicial">Tela Inicial</button>
+            <button id="botao-reiniciar">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        const telaInicio = document.getElementById('tela-inicio');
+        const jogoPrincipal = document.getElementById('jogo-principal');
+        const botaoIniciar = document.getElementById('botao-iniciar');
+        const palavraContainer = document.getElementById('palavra-container');
+        const tecladoContainer = document.getElementById('teclado');
+        const mensagemEl = document.getElementById('mensagem');
+        const botaoReiniciar = document.getElementById('botao-reiniciar');
+        const homemPartes = document.querySelectorAll('.homem-parte');
+        const btnVoltarMural = document.getElementById("btnVoltarMural");
+        const btnTelaInicial = document.getElementById("btnTelaInicial");
+
+        let palavraSelecionada = '';
+        let letrasCorretas = [];
+        let letrasErradas = [];
+        let palavras = [
+            "luccas neto", "whindersson nunes", "juliette freire", "anitta", "gusttavo lima", 
+            "pabllo vittar", "duda beat", "felipe neto", "emily bruno", "gabriela luan", 
+            "mariana saade", "bruna martha", "flavia pavanelli", "mirella santos", "sofia abrahao", 
+            "larissa manoela", "jessica lima", "ricky martin", "kevin o chris", "joão guilherme", 
+            "caitlyn jenner", "léo santana", "simone e simaria", "tati zaqui", "gabi martins", 
+            "daniel saboya", "emilly araujo", "jojo todynho", "iggy azalea", "taylor swift", 
+            "selena gomez", "dua lipa", "lady gaga", "drake", "cardi b", "miley cyrus", "beyoncé", 
+            "ariana grande", "ed sheeran", "shakira", "justin bieber", "post malone", "ricky martin", 
+            "lil nas x", "billie eilish", "rihanna", "leonardo dicaprio", "elton john", "lil wayne", 
+            "lil peep", "rubens gabriel"
+            ];
+
+
+        function iniciarJogo() {
+            telaInicio.classList.add('hidden');
+            jogoPrincipal.classList.remove('hidden');
+            prepararNovoJogo();
+        }
+
+        function prepararNovoJogo() {
+            palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)];
+            letrasCorretas = [];
+            letrasErradas = [];
+            mensagemEl.innerText = '';
+            botaoReiniciar.style.display = 'none';
+
+            homemPartes.forEach(parte => parte.classList.remove('show'));
+            
+            mostrarPalavra();
+            criarTeclado();
+        }
+
+        function mostrarPalavra() {
+            palavraContainer.innerHTML = ` 
+                ${palavraSelecionada
+                    .split('') 
+                    .map(letra => `<span class="letra">${letrasCorretas.includes(letra) || letra === ' ' || letra === '.' ? letra : '_'}</span>`)
+                    .join('')}
+            `;
+
+            // VERIFICAÇÃO DE VITÓRIA CORRIGIDA
+            const vitoria = palavraSelecionada.split('').every(letra => 
+                letrasCorretas.includes(letra) || letra === ' ' || letra === '.'
+            );
+
+            if (vitoria) {
+                mensagemEl.innerText = 'Parabéns! Você venceu! 😃';
+                finalizarJogo();
+            }
+        }
+
+        function atualizarErradas() {
+            homemPartes.forEach((parte, index) => {
+                if (index < letrasErradas.length) {
+                    parte.classList.add('show');
+                }
+            });
+
+            if (letrasErradas.length === homemPartes.length) {
+                mensagemEl.innerText = `Você perdeu! 😕 A palavra era: ${palavraSelecionada}`;
+                finalizarJogo();
+            }
+        }
+
+        function criarTeclado() {
+            const letras = 'abcdefghijklmnopqrstuvwxyz';
+            tecladoContainer.innerHTML = '';
+            for (let letra of letras) {
+                const tecla = document.createElement('div');
+                tecla.classList.add('tecla');
+                tecla.innerText = letra;
+                tecla.addEventListener('click', () => selecionarLetra(letra, tecla));
+                tecladoContainer.appendChild(tecla);
+            }
+        }
+
+        function selecionarLetra(letra, tecla) {
+            if (tecla.classList.contains('usada')) return;
+            
+            tecla.classList.add('usada');
+
+            if (palavraSelecionada.includes(letra)) {
+                letrasCorretas.push(letra);
+                tecla.classList.add('correta');
+            } else {
+                letrasErradas.push(letra);
+                tecla.classList.add('errada');
+            }
+            
+            mostrarPalavra();
+            atualizarErradas();
+        }
+
+        function finalizarJogo() {
+            // Desativa todas as teclas
+            const teclas = document.querySelectorAll('.tecla');
+            teclas.forEach(tecla => {
+                if(!tecla.classList.contains('usada')) {
+                    tecla.classList.add('usada');
+                }
+            });
+            botaoReiniciar.style.display = 'block';
+
+            // Calcula a pontuação
+            const pontuacao = letrasCorretas.length * 10 - letrasErradas.length * 5; 
+            
+            // ATENÇÃO: Use um UUID real e válido aqui para não dar erro ao salvar.
+            // O ideal é que este valor venha de um sistema de login.
+            const userId = 'fd5c2248-3422-40eb-b252-8145e0a214f5'; // Use um UUID VÁLIDO!
+            const nomeJogador = 'Gabriel'; 
+            
+            // CHAMADA CORRIGIDA - A conexão que faltava
+            salvarPontuacaoForca(userId, nomeJogador, pontuacao);
+        }
+
+        async function salvarPontuacaoForca(userId, nomeJogador, pontuacao) {
+            console.log("--- 1. Função salvarPontuacaoForca INICIADA ---");
+            console.log("Dados recebidos:", { userId, pontuacao });
+
+            if (!window._supabase) {
+                console.error("Supabase client não encontrado.");
+                return;
+            }
+
+            const dadosParaSalvar = {
+                user_id: userId,
+                score: pontuacao,
+                tries: letrasErradas.length,
+                word: palavraSelecionada
+            };
+            console.log("--- 2. Objeto para salvar foi criado:", dadosParaSalvar);
+
+            try {
+                console.log("--- 3. TENTANDO inserir no Supabase... ---");
+                const { data, error } = await window._supabase
+                    .from('forca_scores')
+                    .insert([dadosParaSalvar])
+                    .select(); // Adicionamos .select() para obter uma resposta do Supabase
+
+                // Verificação explícita do erro
+                if (error) {
+                    console.error('--- 4. ERRO retornado pelo Supabase:', error);
+                    return;
+                }
+
+                // Se data for nulo ou vazio, a inserção pode ter falhado silenciosamente (RLS)
+                if (!data || data.length === 0) {
+                    console.warn('--- 4. AVISO: Supabase não retornou erro, mas também não retornou dados. Verifique suas Políticas de Segurança (RLS) para INSERT.');
+                    return;
+                }
+                
+                console.log('--- 4. SUCESSO! Supabase retornou os dados salvos:', data);
+                console.log('--- 5. Recarregando o ranking na tela...');
+                carregarRankingForca();
+
+            } catch (err) {
+                console.error('--- ERRO INESPERADO CAPTURADO PELO CATCH:', err);
+            }
+        }
+
+        async function carregarRankingForca() {
+    if (!window._supabase) {
+        console.error("Supabase client não encontrado.");
+        const rankingBoardMenu = document.getElementById('ranking-board-menu');
+        if (rankingBoardMenu) {
+            rankingBoardMenu.innerHTML = '<p>Erro de conexão com o placar.</p>';
+        }
+        return;
+    }
+    
+    const rankingBoardMenu = document.getElementById('ranking-board-menu');
+    if (!rankingBoardMenu) return;
+
+    // A MUDANÇA ESTÁ AQUI: Pedimos o 'score' e, da tabela relacionada 'profiles', pedimos o 'username'.
+    const { data, error } = await window._supabase
+        .from('forca_scores')
+        .select('score, profiles(username)') // <-- MUDANÇA PRINCIPAL
+        .order('score', { ascending: false }) 
+        .limit(5);
+
+    if (error) {
+        console.error('Erro ao carregar o ranking:', error);
+        rankingBoardMenu.innerHTML = '<p>Não foi possível carregar o ranking. Verifique o console.</p>';
+        return;
+    }
+
+    if (data.length === 0) {
+        rankingBoardMenu.innerHTML = '<p>Seja o primeiro a deixar sua marca!</p>';
+        return;
+    }
+
+    const rankingList = document.createElement('ol');
+    data.forEach((entry, index) => {
+        // Agora, usamos o 'username' que veio da tabela 'profiles'.
+        const playerName = entry.profiles?.username || 'Anônimo'; // <-- MUDANÇA PRINCIPAL
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `<span>#${index + 1} ${playerName}</span> <span>${entry.score} pts</span>`;
+        rankingList.appendChild(listItem);
+    });
+
+    rankingBoardMenu.innerHTML = '';
+    rankingBoardMenu.appendChild(rankingList);
+}
+
+        botaoIniciar.addEventListener('click', iniciarJogo);
+        botaoReiniciar.addEventListener('click', prepararNovoJogo);
+        btnVoltarMural.addEventListener("click", function () {
+            window.location.href = "mural.html";  
+        });
+
+        btnTelaInicial.addEventListener("click", function () {
+            window.location.reload();
+        });
+
+        document.addEventListener('DOMContentLoaded', carregarRankingForca);
+
+    </script>
+
+</body>
+</html>
