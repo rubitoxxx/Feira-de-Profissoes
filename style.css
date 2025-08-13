@@ -138,9 +138,9 @@ input:focus, textarea:focus {
 
 /* Estilos para a foto de perfil */
 .foto-perfil-header {
-    width: 80px; /* Ajuste de largura */
-    height: 80px; /* Mantenha a altura igual à largura para um formato circular */
-    border-radius: 50%; /* Torna a imagem redonda */
+    width: 40px; /* Ajuste de largura */
+    height: 40px; /* Mantenha a altura igual à largura para um formato circular */
+    border-radius: 100%; /* Torna a imagem redonda */
     object-fit: cover; /* Garante que a imagem cubra o espaço sem distorção */
     max-width: 50%; /* Impede que a imagem ultrapasse o contêiner */
     height: fit-content; /* Garante a manutenção da proporção da imagem */
@@ -773,4 +773,5 @@ h1 {
 
 .btn-cadastre-se:hover {
     background-color: #e0e0e0; /* Cor de hover */
+
 }
