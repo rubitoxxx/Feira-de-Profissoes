@@ -92,7 +92,6 @@ body::before {
     border-radius: 20px;
     padding: 1.5rem;
     margin: 2rem 0;
-    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(255, 20, 147, 0.3), inset 0 0 20px rgba(255, 105, 180, 0.1);
     width: 90%;
@@ -173,23 +172,24 @@ button:active {
 
 #game-container {
     background-image: url(chao.jpeg);
-    background-repeat: repeat-x;
-    background-size: cover; 
+    /* Altere de cover para repeat-x e defina um tamanho adequado */
+    background-repeat: repeat-x; /* Garante que a imagem se repita horizontalmente */
+    background-size: auto 100%; /* Ajusta a altura da imagem para 100% do contêiner e repete automaticamente na largura */
     background-position: 0 0;
     position: relative;
     z-index: 10;
-    width: 800px;
-    height: 450px;
-    max-width: 95vw;
-    max-height: 95vh;
-    border: 5px solid #ff1493;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(255, 20, 147, 0.7);
-    background-color: rgba(0, 0, 0, 0.7);
-    overflow: hidden;
+    /* --- AJUSTES PARA DIMINUIR A TELA DO JOGO --- */
+    width: 800px; /* Largura fixa desejada para a tela do jogo */
+    height: 450px; /* Altura fixa desejada para a tela do jogo */
+    max-width: 95vw; /* Garante que não ultrapasse 95% da largura da viewport em telas pequenas */
+    max-height: 95vh; /* Garante que não ultrapasse 95% da altura da viewport em telas pequenas */
+    border: 5px solid #ff1493; /* Borda para demarcar a área do jogo */
+    border-radius: 20px; /* Cantos arredondados */
+    box-shadow: 0 0 30px rgba(255, 20, 147, 0.7); /* Sombra para destacar */
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente para o jogo */
+    overflow: hidden; /* Garante que elementos de jogo não saiam da caixa */
     animation: bgMove 3s linear infinite;
 }
-
 
 @keyframes bgMove {
     0% { background-position: 0 0; }
@@ -247,7 +247,7 @@ button:active {
 /* --- TELA DE GAME OVER --- */
 
 #game-over-screen {
-    position: absolute; 
+    position: absolute; /* Agora é absoluto em relação ao #game-container */
     top: 0;
     left: 0;
     width: 100%;
@@ -257,10 +257,9 @@ button:active {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     z-index: 100;
-    visibility: hidden;
+    visibility: hidden; /* Controlado pelo JS */
 }
 
 #game-over-screen h1 {
@@ -294,7 +293,7 @@ button:active {
     #score { font-size: 1.5rem; top: 10px; right: 10px;}
     #game-over-screen h1 { font-size: 2rem; }
 
-    
+    /* Força o game-container a ser 100% da largura em telas menores para maximizar o espaço */
     #game-container {
         width: 100vw;
         height: 100vh;
@@ -307,7 +306,7 @@ button:active {
     }
 }
 
-
+/* Para celulares e telas menores que 480px */
 @media (max-width: 480px) {
     #main-menu h1 { font-size: 2rem; }
     .menu-buttons { flex-direction: column; align-items: center; }

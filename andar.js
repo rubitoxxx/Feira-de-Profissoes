@@ -1,23 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elementos do DOM ---
     const mainMenu = document.getElementById('main-menu');
     const newGameButton = document.getElementById('new-game-button');
     const backToMuralButton = document.getElementById('back-to-mural-button');
     const rankingBoardMenu = document.getElementById('ranking-board-menu');
-function handleJump() {
-    if (!isJumping) return;
-    velocityY += gravity;
-    characterY -= velocityY;
-    if (characterY <= 0) {
-        characterY = 0;
-        isJumping = false;
-        velocityY = 0;
-        character.src = 'boneca_parado.png';
-    }
-    character.style.transform = `translateY(${characterY}px)`;
-}
 
-    // --- Variáveis de Estado do Jogo ---
+    const gameContainer = document.getElementById('game-container');
+    const character = document.getElementById('character');
+    const scoreDisplay = document.getElementById('score');
+    const gameOverScreen = document.getElementById('game-over-screen');
+    const restartButton = document.getElementById('restart-button');
+    const ground = document.getElementById('ground');
+    gameContainer.addEventListener('touchstart', jump);
+
     let gameState = 'menu';
     let score = 0;
     let gameSpeed = 4;
@@ -25,70 +19,33 @@ function handleJump() {
     let gameLoopInterval;
     let obstacleTimeoutId;
 
-    // Variáveis para pulo
     let isJumping = false;
     let velocityY = 0;
+    const gravity = 0.6;
+    const jumpPower = -15;
     let characterY = 0;
-    const gravity = -1.5;
-    const jumpPower = 22;
     let groundHeight = 0;
 
-    // Função para ajustar a altura do chão e a posição inicial do personagem
     const setGroundAndCharacterPosition = () => {
         groundHeight = ground.offsetHeight;
         character.style.bottom = `${groundHeight - 2}px`;
         characterY = 0;
-        character.style.transform = `translateY(0px)`;
+        character.style.transform = `translateY(${characterY}px)`;
     };
-
-    // --- LÓGICA DE CONTROLE DE TELAS ---
-    function loadMenuRanking() {
-        rankingBoardMenu.innerHTML = '<p>Carregando ranking...</p>';
-        const ranking = JSON.parse(localStorage.getItem('ranking')) || [];
-        if (ranking.length === 0) {
-            rankingBoardMenu.innerHTML = '<p>Seja o primeiro a deixar sua marca!</p>';
-            return;
-        }
-        const rankingList = document.createElement('ol');
-        ranking.forEach((entry, index) => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<span>#${index + 1} ${entry.username}</span> <span>${String(entry.score).padStart(5, '0')}</span>`;
-            rankingList.appendChild(listItem);
-        });
-        rankingBoardMenu.innerHTML = '';
-        rankingBoardMenu.appendChild(rankingList);
-    }
 
     function showMainMenu() {
         gameState = 'menu';
         gameContainer.classList.add('hidden');
         mainMenu.classList.remove('hidden');
         gameOverScreen.style.visibility = 'hidden';
-        loadMenuRanking();
     }
 
     function showGame() {
-        gameState = 'playing';
         mainMenu.classList.add('hidden');
         gameContainer.classList.remove('hidden');
         startGame();
     }
 
-    function saveScore(finalScore) {
-        const username = prompt("Qual seu nome?");
-        if (!username) return;
-        const ranking = JSON.parse(localStorage.getItem('ranking')) || [];
-        ranking.push({ username, score: finalScore });
-        ranking.sort((a, b) => b.score - a.score); // Ordena por pontuação
-        if (ranking.length > 10) {
-            ranking.pop(); // Mantém apenas os 10 melhores
-        }
-        localStorage.setItem('ranking', JSON.stringify(ranking));
-    }
-
-    // ==========================================================
-    // --- LÓGICA PRINCIPAL DO JOGO ---
-    // ==========================================================
     function startGame() {
         gameState = 'playing';
         score = 0;
@@ -96,8 +53,21 @@ function handleJump() {
         scoreDisplay.textContent = String(score).padStart(5, '0');
         gameOverScreen.style.visibility = 'hidden';
 
+        document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+
         setGroundAndCharacterPosition();
-        character.src = 'boneca_parado.png';
+        character.src = 'boneco_parado.png';
+
+        if (gameContainer) {
+            gameContainer.style.animation = 'none';
+            void gameContainer.offsetWidth;
+            gameContainer.style.animation = `bgMove ${20 / gameSpeed}s linear infinite`;
+        }
+        if (ground) {
+            ground.style.animation = 'none';
+            void ground.offsetWidth;
+            ground.style.animationPlayState = 'running';
+        }
 
         clearTimeout(obstacleTimeoutId);
         clearInterval(scoreInterval);
@@ -108,31 +78,40 @@ function handleJump() {
         obstacleTimeoutId = setTimeout(spawnObstacle, 1500);
     }
 
-     function handleJump() {
+    function gameLoop() {
+        if (gameState !== 'playing') return;
+        handleJump();
+        moveObstacles();
+        checkCollision();
+    }
+
+    function handleJump() {
         if (!isJumping) return;
         velocityY += gravity;
-        characterY -= velocityY;
-        if (characterY <= 0) {
+        characterY += velocityY;
+
+        if (characterY > 0) {
             characterY = 0;
             isJumping = false;
             velocityY = 0;
-            character.src = 'boneca_parado.png';
+            character.src = 'boneco_parado.png';
         }
         character.style.transform = `translateY(${characterY}px)`;
     }
 
     function jump() {
         if (gameState !== 'playing') return;
-        if (isJumping) return;
-        isJumping = true;
-        velocityY = jumpPower;
-        character.src = 'boneca_pulando.png';
+        if (!isJumping) {
+            isJumping = true;
+            velocityY = jumpPower;
+            character.src = 'boneco_pulando.png';
+        }
     }
 
     function spawnObstacle() {
         if (gameState !== 'playing') return;
         const obstacle = document.createElement('img');
-        obstacle.src = 'boneca_obstaculo.png';
+        obstacle.src = 'capivara.png';
         obstacle.classList.add('obstacle');
         obstacle.style.right = '-50px';
         obstacle.style.bottom = `${groundHeight - 2}px`;
@@ -146,6 +125,7 @@ function handleJump() {
 
     function moveObstacles() {
         const gameContainerWidth = gameContainer.offsetWidth;
+
         document.querySelectorAll('.obstacle').forEach(obstacle => {
             let obsRight = parseFloat(obstacle.style.right);
             obstacle.style.right = `${obsRight + gameSpeed}px`;
@@ -159,36 +139,29 @@ function handleJump() {
         if (gameState !== 'playing') return;
         score++;
         scoreDisplay.textContent = String(score).padStart(5, '0');
+
+        if (score > 0 && score % 100 === 0) {
+            gameSpeed += 0.5;
+            if (gameContainer) {
+                 gameContainer.style.animationDuration = `${20 / gameSpeed}s`;
+            }
+        }
     }
 
     function checkCollision() {
-        // Implementação da verificação de colisões
-        // Exemplo básico:
-        const characterRect = character.getBoundingClientRect();
+        const charRect = character.getBoundingClientRect();
         document.querySelectorAll('.obstacle').forEach(obstacle => {
-            const obstacleRect = obstacle.getBoundingClientRect();
-            if (
-                characterRect.right > obstacleRect.left &&
-                characterRect.left < obstacleRect.right &&
-                characterRect.bottom > obstacleRect.top &&
-                characterRect.top < obstacleRect.bottom
-            ) {
+            const obsRect = obstacle.getBoundingClientRect();
+            if (charRect.right > obsRect.left &&
+                charRect.left < obsRect.right &&
+                charRect.bottom > obsRect.top &&
+                charRect.top < obsRect.bottom) {
                 handleGameOver();
             }
         });
     }
-
-    function gameLoop() {
-        handleJump();
-        moveObstacles();
-        checkCollision();
-        // Aumenta a velocidade gradualmente
-        if (gameSpeed < 12) {
-            gameSpeed += 0.002;
-        }
-    }
-
-    async function handleGameOver() {
+    
+    function handleGameOver() {
         if (gameState === 'gameOver') return;
         gameState = 'gameOver';
 
@@ -198,11 +171,13 @@ function handleJump() {
 
         gameOverScreen.style.visibility = 'visible';
 
-        saveScore(score);
-        loadMenuRanking();
+        if (gameContainer) {
+            gameContainer.style.animationPlayState = 'paused';
+        }
+        if (ground) {
+        }
     }
 
-    // --- Eventos de Input ---
     document.addEventListener('keydown', (e) => {
         if (e.code === 'Space' || e.code === 'ArrowUp') {
             e.preventDefault();
@@ -216,6 +191,8 @@ function handleJump() {
         window.location.href = "mural.html";
     });
 
-    // --- Início do Script ---
+    window.addEventListener('resize', setGroundAndCharacterPosition);
+    setGroundAndCharacterPosition();
+
     showMainMenu();
 });
