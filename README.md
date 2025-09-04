@@ -1,4 +1,4 @@
-# 🌐 Mural Rubix — Rede Social com Gamificação e Supabase
+# 🌐 Feira de Profissoões — Rede Social com Gamificação e Supabase
 
 [![Badge - HTML](https://img.shields.io/badge/HTML5-orange?style=for-the-badge&logo=html5)]()
 [![Badge - CSS](https://img.shields.io/badge/CSS3-blue?style=for-the-badge&logo=css3)]()
