@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha - Rubix</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Seus estilos do jogo da velha podem ficar aqui ou em style.css */
+        /* Estilos do ranking e lobby online */
+        #ranking-section { margin-bottom: 30px; text-align: center; }
+        #ranking-board ol { list-style: none; padding: 0; }
+        #ranking-board li { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--cor-primaria); font-size: 1.1em; text-align: left; }
+        #ranking-board li:last-child { border-bottom: none; }
+        #game-code-display { margin: 20px 0; font-size: 1.2em; text-align: center; }
+        #game-code-display span { background: #333; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        #online-lobby-view input { padding: 10px; font-size: 1em; margin-right: 10px; }
+        #reset-button, #back-to-menu-button { margin-top: 20px; }
+
+        /* Adicione ou ajuste estilos para o tabuleiro se necessário */
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 0;
+            width: 302px;
+            margin: 20px auto;
+            background-color: #22222245;
+            border-radius: 8px;
+            padding: 0;
+            box-shadow: 0 2px 12px #0002;
+        }
+        .cell {
+            border: 1px solid #444;
+            border-right: none;
+            border-bottom: none;
+            width: 100px;
+            height: 100px;
+            background-color: var(--cor-secundaria);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .cell:hover {
+            background-color: #0f0e0ed8;
+        }
+        .x { color: #ff6b6b; }
+        .o { color: #6bff6b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Jogo da Velha</h1>
+
+        <div id="main-menu-view">
+            <div id="ranking-section">
+                <h2><i class="fas fa-trophy"></i> Ranking</h2>
+                <div id="ranking-board"><p>Carregando ranking...</p></div>
+            </div>
+            <div id="mode-selection">
+                <button class="btn" onclick="selecionarModo('computer')">Jogar contra a Máquina</button>
+                <button class="btn" onclick="selecionarModo('online')">Jogar Online</button>
+            </div>
+            <a href="mural.html" class="btn secondary" style="margin-top: 20px;">Voltar ao Mural</a>
+        </div>
+
+        <div id="online-lobby-view" style="display: none;">
+            <h2>Modo Online</h2>
+            <div id="create-game-section">
+                <button class="btn" onclick="criarNovoJogo()">Criar Novo Jogo</button>
+            </div>
+            <hr style="margin: 20px 0;">
+            <div id="join-game-section">
+                <input type="text" id="game-code-input" placeholder="Cole o código do jogo aqui">
+                <button class="btn secondary" onclick="entrarEmJogo()">Entrar no Jogo</button>
+            </div>
+            <button class="btn secondary" style="margin-top: 20px;" onclick="voltarParaMenuPrincipal()">Voltar</button>
+        </div>
+
+        <div id="game-view" style="display: none;">
+            <div id="game-code-display"></div>
+            <div id="game-board"></div>
+            <div id="status"></div>
+            <button id="reset-button" style="display:none;"></button>
+            <button id="back-to-menu-button" class="btn secondary" onclick="location.reload()">Menu Principal</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Elementos do DOM ---
+        const mainMenu = document.getElementById('main-menu-view');
+        const onlineLobby = document.getElementById('online-lobby-view');
+        const gameView = document.getElementById('game-view');
+        const gameBoard = document.getElementById('game-board');
+        const statusDisplay = document.getElementById('status');
+        const resetButton = document.getElementById('reset-button');
+
+        // --- Variáveis de Estado ---
+        let localGameActive = true;
+        let localCurrentPlayer = 'X'; // Sempre começa com o jogador humano
+        let localGameState = ['', '', '', '', '', '', '', '', ''];
+
+        // --- Funções de Controle de UI ---
+        function selecionarModo(mode) {
+            gameMode = mode;
+            mainMenu.style.display = 'none';
+            if (mode === 'online') {
+                onlineLobby.style.display = 'block';
+            } else if (mode === 'computer') {
+                iniciarJogoLocal();
+            }
+        }
+        
+        function voltarParaMenuPrincipal() {
+            onlineLobby.style.display = 'none';
+            gameView.style.display = 'none';
+            mainMenu.style.display = 'block';
+
+            localGameActive = true;
+            localCurrentPlayer = 'X';
+            localGameState = ['', '', '', '', '', '', '', '', ''];
+            gameBoard.innerHTML = '';
+            statusDisplay.textContent = '';
+        }
+
+        function iniciarJogoLocal() {
+            mainMenu.style.display = 'none';
+            gameView.style.display = 'block';
+            onlineLobby.style.display = 'none';
+
+            resetButton.style.display = 'block';
+            resetButton.textContent = 'Reiniciar Jogo';
+            resetButton.onclick = iniciarJogoLocal;
+
+            localGameActive = true;
+            localCurrentPlayer = 'X';
+            localGameState = ['', '', '', '', '', '', '', '', ''];
+            statusDisplay.innerHTML = `Sua vez (X)`;
+            gameBoard.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.cellIndex = i;
+                cell.addEventListener('click', handleCellClickLocal);
+                gameBoard.appendChild(cell);
+            }
+        }
+
+        function handleCellClickLocal(event) {
+            const clickedCell = event.target;
+            const clickedCellIndex = parseInt(clickedCell.getAttribute('data-cell-index'));
+
+            if (localGameState[clickedCellIndex] !== '' || !localGameActive || localCurrentPlayer !== 'X') {
+                return; // Ignora cliques inválidos
+            }
+
+            localGameState[clickedCellIndex] = 'X';
+            clickedCell.innerHTML = 'X';
+            clickedCell.classList.add('x');
+
+            const [isFinished, winnerSymbol] = verificarVencedor(localGameState);
+
+            if (isFinished) {
+                localGameActive = false;
+                if (winnerSymbol === 'X') {
+                    statusDisplay.innerHTML = `Você venceu!`;
+                } else {
+                    statusDisplay.innerHTML = `O jogo empatou!`;
+                }
+                return;
+            }
+
+            localCurrentPlayer = 'O'; 
+            statusDisplay.innerHTML = `Vez da máquina (O)`;
+            setTimeout(makeComputerMove, 700); 
+        }
+
+        // Algoritmo Minimax para a IA
+        function minimax(board, depth, isMaximizingPlayer) {
+            const [isFinished, winnerSymbol] = verificarVencedor(board);
+
+            if (isFinished) {
+                if (winnerSymbol === 'O') return 100 - depth;
+                if (winnerSymbol === 'X') return -100 + depth;
+                return 0; 
+            }
+
+            if (isMaximizingPlayer) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = 'O'; 
+                        let score = minimax(board, depth + 1, false); 
+                        board[i] = ''; 
+                        bestScore = Math.max(bestScore, score);
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = 'X'; 
+                        let score = minimax(board, depth + 1, true); 
+                        board[i] = ''; 
+                        bestScore = Math.min(bestScore, score);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function makeComputerMove() {
+            if (!localGameActive) return;
+
+            let bestScore = -Infinity;
+            let bestMove = -1;
+
+            for (let i = 0; i < localGameState.length; i++) {
+                if (localGameState[i] === '') {
+                    localGameState[i] = 'O'; 
+                    let score = minimax(localGameState, 0, false); 
+                    localGameState[i] = ''; 
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = i;
+                    }
+                }
+            }
+
+            const cellElement = document.querySelector(`.cell[data-cell-index='${bestMove}']`);
+            localGameState[bestMove] = 'O';
+            cellElement.innerHTML = 'O';
+            cellElement.classList.add('o');
+
+            const [isFinished, winnerSymbol] = verificarVencedor(localGameState);
+
+            if (isFinished) {
+                localGameActive = false;
+                if (winnerSymbol === 'O') {
+                    statusDisplay.innerHTML = `A máquina venceu!`;
+                } else {
+                    statusDisplay.innerHTML = `O jogo empatou!`;
+                }
+            } else {
+                localCurrentPlayer = 'X';
+                statusDisplay.innerHTML = `Sua vez (X)`;
+            }
+        }
+
+        function verificarVencedor(board) {
+            const winningConditions = [ 
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+                [0, 4, 8], [2, 4, 6] 
+            ];
+
+            for (const condition of winningConditions) {
+                const [a, b, c] = condition;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return [true, board[a]]; 
+                }
+            }
+
+            if (!board.includes('')) {
+                return [true, null]; 
+            }
+            return [false, null]; 
+        }
+    </script>
+</body>
+</html>

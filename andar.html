@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrida da Lisa</title>
+
+    <script type="module" src="andar.js"></script> 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="andar.css">
+</head>
+<body>
+    <div id="main-menu">
+        <h1>Corrida da Lisa</h1>
+        <div id="menu-ranking">
+            <h2>🏆 Top 5 🏆</h2>
+            <div id="ranking-board-menu">
+                <p>Carregando ranking...</p>
+            </div>
+        </div>
+        <div class="menu-buttons">
+            <button id="new-game-button">Novo Jogo</button>
+            <button id="back-to-mural-button">Voltar para o Mural</button>
+        </div>
+    </div>
+
+    <div id="game-container" class="hidden">
+        <h3>Corrida da Lisa</h3>
+        <div id="score">00000</div>
+        <div id="ground"></div>
+        <img id="character" src="boneca_parado.png" alt="Boneca">
+
+        <div id="game-over-screen">
+            <h1>GAME OVER</h1>
+            <button id="restart-button">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <div id="ranking-container" class="hidden"> 
+        <h2>🏆 Ranking Top 10 🏆</h2>
+        <div id="ranking-board">
+            <p>Carregando ranking...</p>
+        </div>
+    </div>
+</body>
+</html>

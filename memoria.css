@@ -1,0 +1,288 @@
+/* --- 1. CONFIGURAÇÕES GLOBAIS E VARIÁVEIS DE COR --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+    --cor-fundo-app: #0c0c0c;
+    --cor-primaria: #eca8e73f;
+    --cor-borda: #f70702;
+    --cor-texto-principal: #e0e0e0;
+    --cor-texto-secundario: #a0a0a0;
+    --cor-acento: #f41809db;
+    --cor-acento-hover: #e81506;
+    --cor-sucesso: #4CAF50;
+    --cor-erro: #f44336;
+    --fonte-pixel: 'Press Start 2P', cursive;
+    --fonte-padrao: 'Roboto', sans-serif;
+
+    --memoria-card-front: #f00707;
+    --memoria-card-front-text: #2a2a2a;
+    --memoria-card-front-border: #f3062e;
+    --memoria-card-back: #e0b0ff;
+    --memoria-card-back-border: #d8bfd8;
+    --memoria-card-matched: #8a2be2;
+    --memoria-card-matched-shadow: rgba(138, 43, 226, 0.5);
+    --memoria-card-hover-shadow: rgba(255, 105, 180, 0.5);
+    --memoria-stats-bg: #3a3a3a;
+    --memoria-stats-text: #ffe0f0;
+    --memoria-input-bg: #4a4a4a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fonte-padrao);
+    background-color: var(--cor-fundo-app);
+    background-image: url("https://wallpapers.com/images/hd/netflix-background-gs7hjuwvv2g0e9fj.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--cor-texto-principal);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* --- 2. LAYOUTS PRINCIPAIS (Containers) --- */
+.container, .login-container, .perfil-container {
+    width: 100%;
+    max-width: 800px;
+    background-color: rgba(12, 12, 12, 0.85);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--cor-borda);
+    overflow: hidden;
+    padding: 30px;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+h1 { 
+    font-family: var(--fonte-pixel);
+    color: var(--memoria-card-front);
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-size: 2.5em;
+}
+
+h2 {
+    font-family: var(--fonte-pixel);
+    color: var(--cor-acento);
+    margin-bottom: 30px;
+    font-size: 24px;
+    text-align: center;
+    text-shadow: 2px 2px 0px #030000ee;
+}
+
+/* Botões e inputs */
+.btn {
+    display: inline-block;
+    font-family: var(--fonte-padrao);
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid var(--cor-acento);
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    text-align: center;
+    background-color: var(--cor-acento);
+    color: white;
+}
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    background-color: var(--cor-acento-hover);
+}
+.btn.secondary {
+    background-color: transparent;
+    color: var(--cor-acento);
+}
+.btn.secondary:hover {
+    background-color: var(--cor-acento);
+    color: white;
+}
+
+/* --- ESTILOS DO JOGO DA MEMÓRIA --- */
+
+/* Ranking e Lobby Online */
+#ranking-section { 
+    margin-bottom: 30px; 
+    text-align: center; 
+}
+#ranking-board ol { 
+    list-style: none; 
+    padding: 0; 
+}
+#ranking-board li { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 8px; 
+    border-bottom: 1px solid var(--memoria-card-front);
+    font-size: 1.1em; 
+    text-align: left; 
+    color: var(--memoria-stats-text);
+}
+#ranking-board li:last-child { 
+    border-bottom: none; 
+}
+
+#game-code-display { 
+    margin: 20px 0; 
+    font-size: 1.2em; 
+    text-align: center; 
+    color: var(--memoria-stats-text);
+}
+#game-code-display span { 
+    background: var(--memoria-stats-bg);
+    padding: 5px 10px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    color: var(--memoria-card-front-border);
+}
+#online-lobby-view input { 
+    padding: 10px; 
+    font-size: 1em; 
+    margin-right: 10px; 
+    background-color: var(--memoria-input-bg);
+    border: 1px solid var(--memoria-card-front);
+    color: var(--memoria-stats-text);
+    border-radius: 5px; 
+}
+
+/* Estatísticas do Jogo */
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: var(--memoria-stats-text);
+    background-color: var(--memoria-stats-bg);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--memoria-card-front);
+}
+
+/* Tabuleiro do Jogo da Memória */
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 12px;
+    perspective: 1000px;
+    margin: 0 auto 30px auto;
+    max-width: 460px;
+}
+
+/* Estilo base para cada card individual */
+.card {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-out;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--cor-borda);
+}
+
+/* Efeito ao passar o mouse */
+.card:not(.matched):hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px var(--memoria-card-hover-shadow);
+}
+
+.card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s ease-out;
+    transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    font-size: 2.2em;
+    font-weight: bold;
+}
+
+.card-front {
+    background-color: var(--memoria-card-front);
+    color: var(--memoria-card-front-text);
+    transform: rotateY(0deg);
+    border: 1px solid var(--memoria-card-front-border);
+}
+
+.card-back {
+    background-color: var(--memoria-card-back);
+    color: var(--cor-texto-principal);
+    transform: rotateY(180deg);
+    overflow: hidden;
+    border: 1px solid var(--memoria-card-back-border);
+}
+
+.card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+.card.matched .card-front,
+.card.matched .card-back {
+    background-color: var(--memoria-card-matched);
+    color: var(--cor-texto-principal);
+    box-shadow: 0 4px 10px var(--memoria-card-matched-shadow);
+    border-color: var(--memoria-card-matched);
+}
+
+.card.matched {
+    cursor: default;
+    opacity: 0.8;
+}
+
+#reset-button, #back-to-menu-button { 
+    margin-top: 30px;
+}
+
+/* --- DESIGN RESPONSIVO --- */
+@media (max-width: 768px) {
+    #game-board {
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 8px;
+        max-width: 360px;
+    }
+    .card {
+        width: 80px;
+        height: 80px;
+    }
+    .card-front, .card-back {
+        font-size: 1.8em;
+    }
+    .game-stats {
+        font-size: 1em;
+    }
+    #ranking-board li {
+        font-size: 0.9em;
+    }
+}

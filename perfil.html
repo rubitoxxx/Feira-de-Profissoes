@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário - Mural Rubix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="perfil-container">
+        <h2>Meu Perfil</h2>
+        <button onclick="irParaMural()">Ver Mural</button>
+
+        <div class="perfil-imagem">
+            <label for="fotoPerfilInput">
+                <img id="fotoPerfil" 
+                     src="https://img.freepik.com/vetores-premium/icone-de-perfil-de-avatar-padrao-imagem-de-usuario-de-midia-social-icone-de-avatar-cinza-silhueta-de-perfil-em-branco-ilustracao-vetorial_561158-3383.jpg"
+                     alt="Clique para alterar a foto de Perfil" class="foto-perfil">
+                <span><h5>Clique na imagem para alterar</h5></span>
+            </label>
+            <input type="file" id="fotoPerfilInput" accept="image/*" onchange="previewFotoPerfil(event)" style="display: none;">
+        </div>
+
+        <div class="perfil-nome">
+            <center><strong>Nome de Usuário:</strong></center>
+            <br>
+            <input type="text" id="nomePerfil" placeholder="Digite seu nome de usuário">
+        </div>
+
+        <div class="perfil-telefone">
+            <center><strong>Telefone:</strong></center>
+            <br>
+            <input type="text" id="telefonePerfil" placeholder="Digite seu telefone">
+        </div>
+
+        <button onclick="salvarPerfil()">Salvar Perfil</button>
+        <p id="mensagemStatus"></p>
+    </div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem("perfil")) || {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (currentUser.username) document.getElementById('nomePerfil').value = currentUser.username;
+            if (currentUser.telefone) document.getElementById('telefonePerfil').value = currentUser.telefone;
+            if (currentUser.avatarUrl) document.getElementById('fotoPerfil').src = currentUser.avatarUrl;
+        });
+
+        function previewFotoPerfil(event) {
+            const file = event.target.files[0];
+            if (file) document.getElementById('fotoPerfil').src = URL.createObjectURL(file);
+        }
+
+        function salvarPerfil() {
+            const username = document.getElementById('nomePerfil').value.trim();
+            const telefone = document.getElementById('telefonePerfil').value.trim();
+            const mensagemStatus = document.getElementById("mensagemStatus");
+
+            if (!username || !telefone) {
+                mensagemStatus.textContent = "Preencha todos os campos.";
+                return;
+            }
+
+            let avatarUrl = document.getElementById('fotoPerfil').src;
+            currentUser = { username, telefone, avatarUrl };
+            localStorage.setItem("perfil", JSON.stringify(currentUser));
+
+            mensagemStatus.textContent = "Perfil salvo com sucesso!";
+            setTimeout(() => { mensagemStatus.textContent = ""; }, 3000);
+        }
+
+        function irParaMural() {
+            window.location.href = "mural.html";
+        }
+    </script>
+
+    <style>
+        .foto-perfil {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .foto-perfil:hover { transform: scale(1.05); }
+        .perfil-imagem { text-align: center; margin: 20px 0; }
+    </style>
+</body>
+</html>

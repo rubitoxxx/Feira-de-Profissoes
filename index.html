@@ -1,0 +1,31 @@
+<!DOCTYPE html> 
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Feira das Profissões</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <img src="isepe.png" alt="Logo Instituto Superior de Educação do Paraná" 
+             style="display:block; margin:auto; max-width:100%; height:auto;">
+        <h2>Login - Feira de Profissões</h2>
+        
+        <!-- nome -->
+        <div class="input-icon">
+            <input type="text" id="nome" placeholder="Informe seu nome" name="nome" required>
+        </div>
+        
+        <!-- telefone -->
+        <div class="input-icon">
+            <input type="text" id="telefone" placeholder="Informe seu telefone" name="telefone" required>
+        </div>
+
+        <button id="login-button" class="btn-acessar">Acessar</button>
+        <p id="mensagemErro" class="error-message"></p>
+        
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking de RubixCoins</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+     
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 Ranking de RubixCoins 🏆</h1>
+        <p id="loadingMessage">Carregando ranking...</p>
+        <p> id="errorMessage" style="display: none;"></p>
+        <ul id="rankingList"></ul>
+        <button class="back-button" onclick="window.location.href='mural.html'">Voltar ao Mural</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rankingList = document.getElementById('rankingList');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const errorMessage = document.getElementById('errorMessage');
+
+
+            const profiles = [];
+
+            loadingMessage.style.display = 'none';
+
+            if (profiles.length === 0) {
+                rankingList.innerHTML = '<li>Nenhum usuário no ranking ainda. Jogue para ganhar moedas!</li>';
+            } else {
+                profiles.forEach((profile, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add(`rank-${index + 1}`);
+                    listItem.innerHTML = `
+                        <img src="${profile.avatar_url || 'https://via.placeholder.com/150'}" class="rank-avatar" alt="Avatar do ${profile.username}">
+                        <span class="rank-position">${index + 1}º</span>
+                        <span class="rank-username">${profile.username || 'Usuário Anônimo'}</span>
+                        <span class="rank-coins">${profile.rubix_coins || 0} 💎</span>
+                    `;
+                    rankingList.appendChild(listItem);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

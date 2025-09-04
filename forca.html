@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="forca.css">
+</head>
+<body>
+
+    <div id="tela-inicio">
+        <h1>Bem-vindo ao Jogo da Forca!</h1>
+        <button id="botao-iniciar">Começar Jogo</button>
+        <button id="btnVoltarMural">Voltar para o Mural</button>
+
+        <div id="menu-ranking">
+            <h2>🏆 Top 5 🏆</h2>
+            <div id="ranking-board-menu">
+                <p>Carregando ranking...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="jogo-principal" class="hidden">
+        <h1>Jogo da Forca</h1>
+        <div class="jogo-container">
+            <div class="forca-container">
+                <svg height="250" width="200" class="forca">
+                    <line x1="60" y1="20" x2="140" y2="20" />
+                    <line x1="140" y1="20" x2="140" y2="50" />
+                    <line x1="60" y1="20" x2="60" y2="230" />
+                    <line x1="20" y1="230" x2="100" y2="230" />
+
+                    <circle cx="140" cy="70" r="20" class="homem-parte" /> 
+                    <line x1="140" y1="90" x2="140" y2="150" class="homem-parte" /> 
+                    <line x1="140" y1="120" x2="110" y2="100" class="homem-parte" /> 
+                    <line x1="140" y1="120" x2="170" y2="100" class="homem-parte" /> 
+                    <line x1="140" y1="150" x2="110" y2="180" class="homem-parte" /> 
+                    <line x1="140" y1="150" x2="170" y2="180" class="homem-parte" /> 
+                </svg>
+            </div>
+            <div id="palavra-container"></div>
+            <div id="teclado"></div>
+            <div id="mensagem"></div>
+            <button id="btnTelaInicial">Tela Inicial</button>
+            <button id="botao-reiniciar">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        const telaInicio = document.getElementById('tela-inicio');
+        const jogoPrincipal = document.getElementById('jogo-principal');
+        const botaoIniciar = document.getElementById('botao-iniciar');
+        const palavraContainer = document.getElementById('palavra-container');
+        const tecladoContainer = document.getElementById('teclado');
+        const mensagemEl = document.getElementById('mensagem');
+        const botaoReiniciar = document.getElementById('botao-reiniciar');
+        const homemPartes = document.querySelectorAll('.homem-parte');
+        const btnVoltarMural = document.getElementById("btnVoltarMural");
+        const btnTelaInicial = document.getElementById("btnTelaInicial");
+
+        let palavraSelecionada = '';
+        let letrasCorretas = [];
+        let letrasErradas = [];
+        let palavras = [
+            "luccas neto", "whindersson nunes", "juliette freire", "anitta", "gusttavo lima", 
+            "pabllo vittar", "duda beat", "felipe neto", "emily bruno", "gabriela luan", 
+            "mariana saade", "bruna martha", "flavia pavanelli", "mirella santos", "sofia abrahao", 
+            "larissa manoela", "jessica lima", "ricky martin", "kevin o chris", "joão guilherme", 
+            "caitlyn jenner", "léo santana", "simone e simaria", "tati zaqui", "gabi martins", 
+            "daniel saboya", "emilly araujo", "jojo todynho", "iggy azalea", "taylor swift", 
+            "selena gomez", "dua lipa", "lady gaga", "drake", "cardi b", "miley cyrus", "beyoncé", 
+            "ariana grande", "ed sheeran", "shakira", "justin bieber", "post malone", "ricky martin", 
+            "lil nas x", "billie eilish", "rihanna", "leonardo dicaprio", "elton john", "lil wayne", 
+            "lil peep", "rubens gabriel"
+        ];
+
+        function iniciarJogo() {
+            telaInicio.classList.add('hidden');
+            jogoPrincipal.classList.remove('hidden');
+            prepararNovoJogo();
+        }
+
+        function prepararNovoJogo() {
+            palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)];
+            letrasCorretas = [];
+            letrasErradas = [];
+            mensagemEl.innerText = '';
+            botaoReiniciar.style.display = 'none';
+
+            homemPartes.forEach(parte => parte.classList.remove('show'));
+            
+            mostrarPalavra();
+            criarTeclado();
+        }
+
+        function mostrarPalavra() {
+            palavraContainer.innerHTML = ` 
+                ${palavraSelecionada
+                    .split('') 
+                    .map(letra => `<span class="letra">${letrasCorretas.includes(letra) || letra === ' ' || letra === '.' ? letra : '_'}</span>`)
+                    .join('')}
+            `;
+
+            const vitoria = palavraSelecionada.split('').every(letra => 
+                letrasCorretas.includes(letra) || letra === ' ' || letra === '.'
+            );
+
+            if (vitoria) {
+                mensagemEl.innerText = 'Parabéns! Você venceu! 😃';
+                finalizarJogo();
+            }
+        }
+
+        function atualizarErradas() {
+            homemPartes.forEach((parte, index) => {
+                if (index < letrasErradas.length) {
+                    parte.classList.add('show');
+                }
+            });
+
+            if (letrasErradas.length === homemPartes.length) {
+                mensagemEl.innerText = `Você perdeu! 😕 A palavra era: ${palavraSelecionada}`;
+                finalizarJogo();
+            }
+        }
+
+        function criarTeclado() {
+            const letras = 'abcdefghijklmnopqrstuvwxyz';
+            tecladoContainer.innerHTML = '';
+            for (let letra of letras) {
+                const tecla = document.createElement('div');
+                tecla.classList.add('tecla');
+                tecla.innerText = letra;
+                tecla.addEventListener('click', () => selecionarLetra(letra, tecla));
+                tecladoContainer.appendChild(tecla);
+            }
+        }
+
+        function selecionarLetra(letra, tecla) {
+            if (tecla.classList.contains('usada')) return;
+            
+            tecla.classList.add('usada');
+
+            if (palavraSelecionada.includes(letra)) {
+                letrasCorretas.push(letra);
+                tecla.classList.add('correta');
+            } else {
+                letrasErradas.push(letra);
+                tecla.classList.add('errada');
+            }
+            
+            mostrarPalavra();
+            atualizarErradas();
+        }
+
+        function finalizarJogo() {
+            const teclas = document.querySelectorAll('.tecla');
+            teclas.forEach(tecla => tecla.classList.add('usada'));
+            botaoReiniciar.style.display = 'block';
+
+            const pontuacao = letrasCorretas.length * 10 - letrasErradas.length * 5; 
+            
+            const perfil = JSON.parse(localStorage.getItem("perfil")) || { username: "Anônimo" };
+            salvarPontuacaoForca(perfil.username, pontuacao);
+        }
+
+        function salvarPontuacaoForca(nomeJogador, pontuacao) {
+            const ranking = JSON.parse(localStorage.getItem("rankingForca")) || [];
+            ranking.push({ username: nomeJogador, score: pontuacao });
+            localStorage.setItem("rankingForca", JSON.stringify(ranking));
+            carregarRankingForca();
+        }
+
+        function carregarRankingForca() {
+            const rankingBoardMenu = document.getElementById('ranking-board-menu');
+            const ranking = JSON.parse(localStorage.getItem("rankingForca")) || [];
+
+            if (ranking.length === 0) {
+                rankingBoardMenu.innerHTML = '<p>Seja o primeiro a deixar sua marca!</p>';
+                return;
+            }
+
+            const top5 = ranking.sort((a,b) => b.score - a.score).slice(0,5);
+            const rankingList = document.createElement('ol');
+            top5.forEach((entry, index) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<span>#${index + 1} ${entry.username}</span> <span>${entry.score} pts</span>`;
+                rankingList.appendChild(listItem);
+            });
+
+            rankingBoardMenu.innerHTML = '';
+            rankingBoardMenu.appendChild(rankingList);
+        }
+
+        botaoIniciar.addEventListener('click', iniciarJogo);
+        botaoReiniciar.addEventListener('click', prepararNovoJogo);
+        btnVoltarMural.addEventListener("click", () => window.location.href = "mural.html");
+        btnTelaInicial.addEventListener("click", () => window.location.reload());
+
+        document.addEventListener('DOMContentLoaded', carregarRankingForca);
+    </script>
+
+</body>
+</html>

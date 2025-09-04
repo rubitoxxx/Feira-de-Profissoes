@@ -1,0 +1,777 @@
+/* Reset mais robusto (ou use um como o Normalize.css) */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary-color: #05d49d45; 
+    --secondary-color: #dce7e7e3; 
+    --background-light: #e7f0edda; 
+    --background-dark: #01060b62; 
+    --text-dark: #080808;
+    --text-light: #000000;
+    --border-color: #000102;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --font-family-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family-main);
+  background-image: url("./download.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+/* Container e Cards */
+.container,
+.login-container,
+.perfil-container,
+.post {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: rgba(214, 214, 212, 0.945);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efeito de hover para elementos interativos */
+.container:hover,
+.card:hover,
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #080808;
+    text-decoration: underline;
+}
+
+/* Botões de postagem */
+button, .btn, .button {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #07f3c4;
+    color: #030303;
+    box-shadow: 0 4px 12px rgb(0, 10, 8);
+}
+
+button:hover, .btn:hover, .button:hover {
+    background-color: #060000a7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.881);
+}
+
+.button-secondary {
+    background-color: var(--secondary-color);
+    color: #020200;
+}
+
+.button-secondary:hover {
+    background-color: #0be9b1;
+    color: var(--text-dark);
+}
+
+/* Formulários */
+input[type="text"], input[type="telefone"], input[type="password"], textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(202, 208, 214, 0.174);
+}
+
+/* Estilos para o Mural */
+/*perfil do campo de postagem*/
+.profile-and-input {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #034d4a67;
+    border: 2px solid #0a0a0a;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 4, 3, 0.792);
+    margin-bottom: 1.5rem;
+}
+
+/* Estilos para a foto de perfil */
+.foto-perfil-header {
+    width: 40px; /* Ajuste de largura */
+    height: 40px; /* Mantenha a altura igual à largura para um formato circular */
+    border-radius: 100%; /* Torna a imagem redonda */
+    object-fit: cover; /* Garante que a imagem cubra o espaço sem distorção */
+    max-width: 50%; /* Impede que a imagem ultrapasse o contêiner */
+    height: fit-content; /* Garante a manutenção da proporção da imagem */
+}
+
+/* Ajuste na imagem dentro do post */
+.tweet-content img {
+    max-width: 100%;  /* Garante que a imagem ocupe no máximo 100% do tamanho do contêiner */
+    height: auto;  /* Mantém a proporção da imagem */
+    border-radius: -10px;  /* Bordas arredondadas na imagem */
+    object-fit: cover;  /* Para garantir que a imagem se ajuste corretamente */
+}
+
+
+.post-input-area {
+    flex-grow: 1;
+}
+
+
+
+/* ranking top 3 */
+.header-mural {
+    background: linear-gradient(135deg, #00000023), #00000018;
+    color: rgb(11, 12, 12);
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.header-mural h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+}
+
+.header-mural h5 {
+    color: rgba(10, 9, 9, 0.9);
+}
+
+.header-mural__user-info {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.coin-count {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(6, 236, 198, 0.669);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.coin-icon {
+    margin-right: 8px;
+    color: rgb(244, 228, 4);
+}
+
+.header-mural__nav-button {
+    background-color: rgba(5, 240, 185, 0.719);
+    color: rgb(0, 10, 8);
+    border: 1px solid rgba(12, 0, 0, 0.975);
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+.header-mural__nav-button:hover {
+    background-color: rgba(239, 232, 232, 0.5);
+    border-color: rgb(0, 0, 0);
+}
+
+/* Estilos para o Top 3 do Ranking */
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #01060b;
+    color: rgb(255, 255, 255);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: #0100017f;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+}
+
+h1 {
+    color: #000000;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    text-shadow: 2px 2px 4px rgb(200, 217, 212);
+}
+#rankingListTop3 {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#rankingListTop3 li {
+    background-color: #09dcd1bb;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
+    border: 1px solid #010101;
+    box-shadow: 0 2px 5px rgb(17, 4, 4);
+    transition: transform 0.3s ease;
+}
+
+/* Personalizando o estilo de cada posição */
+#rankingListTop3 li:nth-child(1) {
+    background-color: #ffd700; /* Ouro para o 1º lugar */
+    color: #060606;
+    font-weight: bold;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+#rankingListTop3 li:nth-child(2) {
+    background-color: #c0c0c0; /* Prata para o 2º lugar */
+    color: #333;
+    font-weight: bold;
+}
+
+#rankingListTop3 li:nth-child(3) {
+    background-color: #cd7f32; /* Bronze para o 3º lugar */
+    color: #333;
+    font-weight: bold;
+}
+/*numero de posição do ranking*/
+.rank-position {
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 30px;
+    text-align: left;
+    color: rgb(4, 4, 4);
+}
+/*nome de usuario*/
+.rank-username {
+    flex-grow: 1;
+    text-align: left;
+    margin-left: 25px;
+    font-weight: bold;
+    color: rgb(11, 10, 10);
+}
+/*numero de quantidade de coins*/
+.rank-coins {
+    font-weight: bold;
+    color: rgb(3, 0, 0);
+}
+
+.rank-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+#loadingMessage {
+    color: #02cfc1;
+    margin-top: 20px;
+}
+
+#errorMessage {
+    color: #ff5722;
+    margin-top: 20px;
+}
+
+.back-button {
+    background-color: #0aecc6;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #040707;
+}
+/* --- 6. FEED DE POSTS (MURAL) --- */
+.feed-posts {
+    padding-top: 20px;
+}
+
+.tweet-post {
+    background-color: rgba(3, 55, 51, 0.6);
+    border: 1px solid var(--cor-primaria);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.tweet-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.2);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--cor-acento);
+    object-fit: cover;
+}
+
+.post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-author {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--cor-texto-principal);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.post-author:hover {
+    color: var(--cor-acento);
+}
+
+.post-date {
+    font-size: 0.8em;
+    color: var(--cor-texto-secundario);
+}
+
+.post-content p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: var(--cor-texto-principal);
+    white-space: pre-wrap; /* Preserva espaços em branco e quebras de linha */
+    word-wrap: break-word; /* Quebra palavras longas */
+}
+
+.post-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 350px;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: 1px solid var(--cor-primaria);
+    object-fit: contain; /* Garante que a imagem se ajuste sem cortar */
+}
+
+/* Área de preview da imagem antes de postar */
+#image-preview-container { /* Adicionado container para posicionar o botão de remover */
+    position: relative;
+    margin-top: 15px;
+    text-align: center; /* Centraliza a imagem dentro do container */
+}
+
+#image-preview {
+    max-width: 100%;
+    height: auto;
+    max-height: 350px;
+    border-radius: 10px;
+    border: 1px solid var(--cor-primaria);
+    object-fit: contain;
+    display: block; /* Garante que a imagem se comporte como um bloco para centralização */
+    margin: 0 auto;
+}
+
+#remove-image-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(244, 67, 54, 0.9);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    z-index: 10; /* Garante que o botão fique acima da imagem */
+}
+
+#remove-image-btn:hover {
+    background: var(--cor-erro);
+    transform: scale(1.1);
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    margin-top: 20px;
+    border-top: 1px solid var(--cor-primaria);
+}
+
+.action-button, .delete-button {
+    background: none;
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-texto-secundario);
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    transition: all 0.2s;
+}
+
+.action-button:hover {
+    background-color: var(--cor-borda);
+    color: var(--cor-texto-principal);
+    transform: scale(1.05);
+}
+
+.delete-button {
+    border-color: var(--cor-texto-secundario);
+}
+
+.delete-button:hover {
+    border-color: var(--cor-erro);
+    background-color: rgba(244, 67, 54, 0.1);
+    color: var(--cor-erro);
+    transform: scale(1.05);
+}
+
+.comment-count {
+    background-color: var(--cor-borda);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+}
+
+
+/* Efeito de fundo para pggame.html */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("./image_22a2ac.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    color: var(--text-dark);
+    line-height: 1.6;
+    z-index: -2;
+}
+
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.floating-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    background-color: rgba(218, 7, 7, 0.879);
+    border-radius: 50%;
+    animation: float 20s linear infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Estilos adicionais para telas de login e cadastro */
+.login-container button,
+.login-container .btn,
+.login-container .button {
+    width: 100%;
+    padding: 0.9rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background-color: #05d49d;
+    color: #020000;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 4px 12px rgba(5, 212, 157, 0.15);
+}
+
+.login-container button:hover,
+.login-container .btn:hover,
+.login-container .button:hover {
+    background-color: #049e74;
+    transform: translateY(-2px) scale(1.03);
+}
+.login-container h2 {
+    text-align: center;
+    color: #000000;
+}
+
+.login-container {
+    max-width: 400px; /* Reduza o valor aqui */
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: rgb(236, 230, 230);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgb(9, 18, 11);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.perfil-nome input {
+    width: 300px; /* Define a largura do campo de entrada */
+    display: block; /* Garante que o campo de entrada ocupe sua própria linha */
+    margin-left: auto; /* Centraliza o campo horizontalmente */
+    margin-right: auto;
+}
+/* Para centralizar textos e botões */
+.perfil-container h2,
+.perfil-container button {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block; /* Garante que os botões ocupem sua própria linha */
+}
+
+.input-icon {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+.input-icon .icon {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    color: #05d49d;
+}
+.input-icon input {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    width: 100%;
+    background: transparent;
+    padding: 0;
+}
+
+/* Estilos para mensagens de status */
+.mensagem {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-weight: 500;
+    text-align: center;
+    display: none;
+}
+
+.mensagem.erro {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.mensagem.sucesso {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.mensagem.info {
+    background-color: #dbeafe;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+/* Estilo para mensagens de erro existentes */
+.error-message {
+    color: #dc2626;
+    text-align: center;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Estilos específicos para botões de login e cadastro */
+.btn-entrar {
+    background: linear-gradient(135deg, #05d49d 0%, #049e74 100%);
+    color: #ffffff;
+    border: 2px solid #05d49d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(5, 212, 157, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-entrar:hover {
+    background: linear-gradient(135deg, #06efb1 0%, #04f0a5 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgb(12, 12, 12);
+    border-color: #07ebae;
+}
+
+.btn-cadastrar {
+    background: linear-gradient(135deg, #07eaa9 0%, #05d6b7 100%);
+    color: #ffffff;
+    border: 2px solid #03f3b3;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(1, 236, 189, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-cadastrar:hover {
+    background: linear-gradient(135deg, #09e6ae 0%, #05efef 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgb(1, 4, 18);
+    border-color: #0fdcdc;
+}
+
+/* Estilo para botão de cadastro na página de login */
+.btn-cadastro-link {
+    background: linear-gradient(135deg, #e3dfdf 0%, #e4e3e2 100%);
+    color: #ffffff;
+    border: 2px solid #cec8c8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(28, 20, 20, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-cadastro-link:hover {
+    background: linear-gradient(135deg, #06e2ab 0%, #05f0a6 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(23, 1, 1, 0.986);
+    border-color: #07cd81;
+}
+
+.btn-acessar {
+    background-color: #38b44a; /* Cor do botão da imagem */
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.btn-acessar:hover {
+    background-color: #2e963c; /* Cor de hover */
+}
+
+.btn-cadastre-se {
+    background-color: #f0f0f0; /* Cor do botão de cadastro da imagem */
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.btn-cadastre-se:hover {
+    background-color: #e0e0e0; /* Cor de hover */
+
+}
