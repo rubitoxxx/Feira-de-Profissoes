@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Usuário - Mural Rubix</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="perfil-container">
         <h2>Meu Perfil</h2>
@@ -13,12 +15,23 @@
 
         <div class="perfil-imagem">
             <label for="fotoPerfilInput">
-                <img id="fotoPerfil" 
-                     src="https://img.freepik.com/vetores-premium/icone-de-perfil-de-avatar-padrao-imagem-de-usuario-de-midia-social-icone-de-avatar-cinza-silhueta-de-perfil-em-branco-ilustracao-vetorial_561158-3383.jpg"
-                     alt="Clique para alterar a foto de Perfil" class="foto-perfil">
-                <span><h5>Clique na imagem para alterar</h5></span>
+                <img id="fotoPerfil"
+                    src="https://img.freepik.com/vetores-premium/icone-de-perfil-de-avatar-padrao-imagem-de-usuario-de-midia-social-icone-de-avatar-cinza-silhueta-de-perfil-em-branco-ilustracao-vetorial_561158-3383.jpg"
+                    alt="Clique para alterar a foto de Perfil" class="foto-perfil">
+                <span>
+                    <h5>Clique na imagem para alterar</h5>
+                </span>
             </label>
-            <input type="file" id="fotoPerfilInput" accept="image/*" onchange="previewFotoPerfil(event)" style="display: none;">
+            <select id="imagemEscolhida" onchange="alterarImagemPerfil()">
+                <option value="ADM.PNG">ADMINISTRAÇÃO</option>
+                <option value="CONTABIL.PNG">CONTABILIDADE</option>
+                <option value="PEDAGOGIA.PNG">PEDAGOGIA</option>
+                <option value="ENFERMAGEM.PNG">ENFERMAGEM</option>
+                <option value="AGRO.PNG">AGRONOMIA</option>
+                <option value="PSICO.PNG">PSICOLOGIA</option>
+                <option value="DIREITO.PNG">DIREITO</option>
+                <option value="ADS.PNG">ANALISE DESENVOLVIMENTO DE SISTEMAS</option>
+            </select>
         </div>
 
         <div class="perfil-nome">
@@ -46,9 +59,9 @@
             if (currentUser.avatarUrl) document.getElementById('fotoPerfil').src = currentUser.avatarUrl;
         });
 
-        function previewFotoPerfil(event) {
-            const file = event.target.files[0];
-            if (file) document.getElementById('fotoPerfil').src = URL.createObjectURL(file);
+        function alterarImagemPerfil() {
+            const imagemSelecionada = document.getElementById('imagemEscolhida').value;
+            document.getElementById('fotoPerfil').src = imagemSelecionada;
         }
 
         function salvarPerfil() {
@@ -64,6 +77,9 @@
             let avatarUrl = document.getElementById('fotoPerfil').src;
             currentUser = { username, telefone, avatarUrl };
             localStorage.setItem("perfil", JSON.stringify(currentUser));
+
+            // Salvar URL da foto de perfil
+            localStorage.setItem("fotoPerfilUrl", avatarUrl);
 
             mensagemStatus.textContent = "Perfil salvo com sucesso!";
             setTimeout(() => { mensagemStatus.textContent = ""; }, 3000);
@@ -84,8 +100,16 @@
             cursor: pointer;
             transition: transform 0.3s ease;
         }
-        .foto-perfil:hover { transform: scale(1.05); }
-        .perfil-imagem { text-align: center; margin: 20px 0; }
+
+        .foto-perfil:hover {
+            transform: scale(1.05);
+        }
+
+        .perfil-imagem {
+            text-align: center;
+            margin: 20px 0;
+        }
     </style>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 </head>
+
 <body>
     <div class="container">
         <div style="text-align: center;">
@@ -18,12 +20,14 @@
         <header class="header">
             <div class="user-info-header">
                 <h2>Olá, <span id="nomeUsuario">Carregando...</span>!</h2>
-                <p id="rubixcoins-display"><i class="fas fa-coins"></i> RubixCoins: <span id="saldoRubixCoins">0</span></p>
+                <p id="rubixcoins-display"><i class="fas fa-coins"></i> RubixCoins: <span id="saldoRubixCoins">0</span>
+                </p>
                 <div style="text-align: center;">
                     <h3>Bem-vindo à nossa Rede Social!<br>
                         Este projeto foi desenvolvido como parte de um trabalho acadêmico<br>
                         com o objetivo de criar um espaço interativo onde usuários podem compartilhar ideias,<br>
-                        postar mensagens, comentar e se conectar com outras pessoas. Estamos sempre evoluindo e abertos a sugestões.<br>
+                        postar mensagens, comentar e se conectar com outras pessoas. Estamos sempre evoluindo e abertos
+                        a sugestões.<br>
                         Aproveite e explore a plataforma!<br></h3>
                     <h5>Acumule moedas postando, comentando, jogando e até<br>
                         mesmo trocando a foto de perfil</h5><br>
@@ -38,65 +42,95 @@
                             <button onclick="sair()">Sair</button>
                         </div>
                         <div>
-                        <br>
-                        <br>
-                    </div>
+                            <br>
+                            <br>
+                        </div>
                     </nav>
                 </div>
             </div>
-        <div class="content-wrapper">
-            <main class="main-content">
-                <div class="new-post-section">
-                    <div class="profile-and-input">
-                        <img id="fotoPerfilHeader" class="foto-perfil-header" src="" alt="Foto de Perfil">
-                        <div class="post-input-area">
-                            <textarea id="mensagem" placeholder="O que está acontecendo?"></textarea>
-                            
-                            <div id="image-preview-container" style="display: none; margin-top: 10px; position: relative;">
-                                <img id="image-preview" src="#" alt="Preview da imagem" style="max-width: 100%; border-radius: 8px;">
-                                <button id="remove-image-btn" style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); border: none; color: white; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center;">X</button>
+            <div class="content-wrapper">
+                <main class="main-content">
+                    <div class="new-post-section">
+                        <div class="profile-and-input">
+                            <img id="fotoPerfilHeader" class="foto-perfil-header" src="" alt="Foto de Perfil">
+                            <div class="post-input-area">
+                                <textarea id="mensagem" placeholder="O que está acontecendo?"></textarea>
+
+                                <div id="image-preview-container"
+                                    style="display: none; margin-top: 10px; position: relative;">
+                                    <img id="image-preview" src="#" alt="Preview da imagem"
+                                        style="max-width: 100%; border-radius: 8px;">
+                                    <button id="remove-image-btn"
+                                        style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); border: none; color: white; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center;">X</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-        <script>
-            
-            document.addEventListener("DOMContentLoaded", function() {
-                
-                const fotoPerfil = localStorage.getItem("fotoPerfilUrl");
-                const fotoPerfilHeader = document.getElementById("fotoPerfilHeader");
-                if (fotoPerfil && fotoPerfilHeader) {
-                    fotoPerfilHeader.src = fotoPerfil;
-                } else {
-                    fotoPerfilHeader.src = "default-profile.png"; // imagem padrão se não houver foto
-                }
-            });
-        </script>
+                        <script>
 
-                    <div>
-                    </div>
-                    <div class="post-actions-toolbar">
-                        <input type="file" id="file-upload" accept="image/*" style="display: none;">
-                        <label for="file-upload" class="action-button-icon" title="Adicionar imagem">
-                            <i class="fas fa-image"></i>
-                        </label>
-                        <button id="emoji-btn-main" class="emoji-button" title="Adicionar emoji">😀</button>
-                        <button onclick="postarMensagem()" class="rubitar-btn">Rubitar</button>
-                    </div>
-                    <div>
-                    <br>
-                    <br>
-                </div>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                const fotoPerfil = localStorage.getItem("fotoPerfilUrl");
+                                const fotoPerfilHeader = document.getElementById("fotoPerfilHeader");
+
+                                // Se houver uma foto salva no localStorage, exibe ela
+                                if (fotoPerfil && fotoPerfilHeader) {
+                                    fotoPerfilHeader.src = fotoPerfil;
+                                } else {
+                                    fotoPerfilHeader.src = "default-profile.png"; // imagem padrão
+                                }
+                            });
+
+                            async function postarMensagem() {
+                                const texto = document.getElementById("mensagem").value.trim();
+                                if (texto === "") {
+                                    alert("Você precisa escrever algo.");
+                                    return;
+                                }
+
+                                const fotoPerfil = localStorage.getItem("fotoPerfilUrl") || "default-profile.png"; // Foto de perfil ou imagem padrão
+
+                                const post = document.createElement("div");
+                                post.classList.add("post");
+
+                                post.innerHTML = `
+        <div class="post-header">
+            <img src="${fotoPerfil}" alt="Foto de Perfil" class="foto-perfil-post">
+            <span>Usuário</span>
+        </div>
+        <p>${texto}</p>
+    `;
+
+                                const mural = document.getElementById("mural");
+                                mural.appendChild(post);
+
+                                document.getElementById("mensagem").value = "";
+                            }
+                        </script>
+
+                        <div>
+                        </div>
+                        <div class="post-actions-toolbar">
+                            <input type="file" id="file-upload" accept="image/*" style="display: none;">
+                            <label for="file-upload" class="action-button-icon" title="Adicionar imagem">
+                                <i class="fas fa-image"></i>
+                            </label>
+                            <button id="emoji-btn-main" class="emoji-button" title="Adicionar emoji">😀</button>
+                            <button onclick="postarMensagem()" class="rubitar-btn">Rubitar</button>
+                        </div>
+                        <div>
+                            <br>
+                            <br>
+                        </div>
                     </div>
                     <ul id="rankingListTop3">
                     </ul>
-                </div>
-                <div>
+            </div>
+            <div>
                 <br>
                 <br>
             </div>
-                <div id="mural" class="feed-posts"></div>
+            <div id="mural" class="feed-posts"></div>
             </main>
-        </div> 
+    </div>
     </div>
     <div id="coin-animation-container"></div>
     <emoji-picker style="display: none; position: absolute; z-index: 1000;"></emoji-picker>
@@ -122,21 +156,22 @@
             document.getElementById("mensagem").value = "";
         }
 
-   
+
         function sair() {
             window.location.href = "index.html";
         }
 
-        
-        function irParaPerfil() {    
-            window.location.href = "perfil.html";    
+
+        function irParaPerfil() {
+            window.location.href = "perfil.html";
         }
 
-      
-        function game() {    
-            window.location.href = "pggame.html";    
+
+        function game() {
+            window.location.href = "pggame.html";
         }
     </script>
 </body>
+
 </html>
 <script src="script.js"></script>
