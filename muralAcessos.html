@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mural Rubix - Acessos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-image: url("./download.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .mural-container {
+            background-color: rgba(1, 6, 11, 0.85);
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            max-width: 700px;
+            margin: 50px auto;
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .mural-container h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        #lista-acessos li {
+            background-color: rgba(5, 212, 157, 0.3);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            list-style: none;
+            font-weight: bold;
+        }
+
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-weight: bold;
+            background-color: #0aecc6;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background-color: #04bfa0;
+        }
+    </style>
+</head>
+<body>
+    <div class="mural-container">
+        <h2>Mural de Acessos</h2>
+        <ul id="lista-acessos"></ul>
+        <button class="download-btn" onclick="baixarAcessos()">📥 Baixar Acessos</button>
+    </div>
+
+    <script>
+        const listaAcessos = document.getElementById('lista-acessos');
+
+        function carregarAcessos() {
+            const acessos = JSON.parse(localStorage.getItem("acessos")) || [];
+            listaAcessos.innerHTML = "";
+
+            if (acessos.length === 0) {
+                listaAcessos.innerHTML = "<li>Nenhum acesso registrado.</li>";
+                return;
+            }
+
+            acessos.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.nome} - ${item.telefone} (${new Date(item.data_acesso).toLocaleString()})`;
+                listaAcessos.appendChild(li);
+            });
+        }
+
+        function baixarAcessos() {
+            const acessos = JSON.parse(localStorage.getItem("acessos")) || [];
+
+            if (acessos.length === 0) {
+                alert("Nenhum acesso registrado.");
+                return;
+            }
+
+            // Gerar CSV
+            let csv = "Nome,Telefone,Data de Acesso\n";  // Cabeçalho
+
+            acessos.forEach(item => {
+                const dataFormatada = new Date(item.data_acesso).toLocaleString();
+                csv += `"${item.nome}","${item.telefone}","${dataFormatada}"\n`;
+            });
+
+            // Criar link de download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `acessos_${new Date().toISOString().slice(0,10)}.csv`;  // Nome do arquivo com data
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        carregarAcessos();
+    </script>
+</body>
+</html>

@@ -48,6 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Salva no localStorage
         localStorage.setItem("perfil", JSON.stringify(usuario));
 
+        // Registrar o acesso no localStorage
+        const acessos = JSON.parse(localStorage.getItem("acessos")) || [];
+        acessos.push({ nome: nome, telefone: telefone, data_acesso: new Date().toISOString() });
+
+        // Salva os acessos no localStorage
+        localStorage.setItem("acessos", JSON.stringify(acessos));
+
         alert('Login realizado com sucesso! Redirecionando...');
         window.location.href = 'mural.html'; 
     });
