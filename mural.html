@@ -88,13 +88,18 @@
 
                                 const fotoPerfil = localStorage.getItem("fotoPerfilUrl") || "default-profile.png"; // Foto de perfil ou imagem padrão
 
+                                // Buscar o nome do usuário no localStorage
+                                const currentUser = JSON.parse(localStorage.getItem("perfil")) || {};
+                                const nomeUsuario = currentUser.username || "Usuário";
+
+                                // Criação do novo post
                                 const post = document.createElement("div");
                                 post.classList.add("post");
 
                                 post.innerHTML = `
         <div class="post-header">
             <img src="${fotoPerfil}" alt="Foto de Perfil" class="foto-perfil-post">
-            <span>Usuário</span>
+            <span>${nomeUsuario}</span> <!-- Exibe o nome do usuário -->
         </div>
         <p>${texto}</p>
     `;
@@ -140,32 +145,16 @@
             const mural = document.getElementById("mural");
             mural.innerHTML = "<p>Carregando mural...</p>";
 
-
             mural.innerHTML = "<p>Mensagens carregadas sem o uso do Supabase.</p>";
         }
-
-        async function postarMensagem() {
-            const texto = document.getElementById("mensagem").value.trim();
-            if (texto === "") {
-                alert("Você precisa escrever algo ou selecionar uma imagem.");
-                return;
-            }
-
-            alert('Mensagem postada com sucesso (sem Supabase).');
-
-            document.getElementById("mensagem").value = "";
-        }
-
 
         function sair() {
             window.location.href = "index.html";
         }
 
-
         function irParaPerfil() {
             window.location.href = "perfil.html";
         }
-
 
         function game() {
             window.location.href = "pggame.html";

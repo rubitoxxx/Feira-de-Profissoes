@@ -508,12 +508,53 @@ h1 {
 
 .comment-count {
     background-color: var(--cor-borda);
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 12px;
     font-weight: bold;
     padding: 2px 8px;
     border-radius: 10px;
     margin-left: 8px;
+}
+/* Ajuste da foto de perfil dentro do post */
+.post-header img.foto-perfil-post {
+    width: 50px; /* Largura da foto do perfil no post */
+    height: 50px; /* Mantém a altura igual para deixar a imagem redonda */
+    border-radius: 50%; /* Torna a imagem circular */
+    object-fit: cover; /* Garante que a imagem cubra o espaço sem distorção */
+    margin-right: 10px; /* Espaço entre a imagem e o texto do post */
+}
+
+/* Ajuste no conteúdo do post */
+.post {
+    display: flex; /* Alinha o conteúdo do post horizontalmente */
+    align-items: center; /* Alinha verticalmente o conteúdo */
+    gap: 12px; /* Espaço entre a foto e o texto */
+    padding: 15px;
+    border-radius: 12px;
+    background-color: rgba(125, 234, 194, 0.945);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    margin-bottom: 1.5rem;
+}
+
+/* Ajustes adicionais no conteúdo do post */
+.post p {
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+    flex-grow: 1; /* Faz o texto ocupar o restante do espaço disponível */
+}
+/* Cor do nome do usuário no post */
+.post-header span {
+    color: black; /* Deixa o nome do usuário preto */
+    font-weight: bold; /* Torna o nome mais destacado */
+}
+
+/* Ajuste do container do post para garantir a integração com a imagem */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
 
